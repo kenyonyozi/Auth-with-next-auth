@@ -27,11 +27,11 @@ export const authOptions: NextAuthOptions = {
                     })
                 });
                 const user = await res.json();
-                console.log(res);
+                console.log({user});
 
 
                 if (res.ok && user) {
-                    console.log(user);
+                    console.log(',,,,,',user);
 
                     return user;
                 }
@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
             return{...token, ...user}
         },
         async session({session,token,user}){
-            session.user =token
+            session.user = token
             return session
         }
     }

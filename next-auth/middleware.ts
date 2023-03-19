@@ -1,6 +1,10 @@
 export {default} from 'next-auth/middleware'
 
-export const config = {matcher :['/admins']}
+export const config = {matcher :['/admins','/pricing','/about']}
+
+
+
+
 
 
 // export async function middleware(req) {

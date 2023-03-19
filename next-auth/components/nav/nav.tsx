@@ -1,13 +1,18 @@
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { getSession, signIn, signOut, useSession } from 'next-auth/react'
+import { redirect } from 'next/dist/server/api-utils';
 import React from 'react'
 
-const Nav = () => {
-    const {data: session} = useSession();
-    // const { data } = useSession()
-    // const { accessToken } = data
+export default function Nav() {
+    const { data: session, status } = useSession();
 
     console.log(session);
-    
+    console.log('status', status);
+
+    // if (!session) {
+      
+    // }
+
+
 
     return (
         <div>
@@ -22,7 +27,7 @@ const Nav = () => {
                             <li>
                                 <a href="/about" className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">About</a>
                             </li>
-                          
+
                             <li>
                                 <a href="/pricing" className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pricing</a>
                             </li>
@@ -33,12 +38,12 @@ const Nav = () => {
                     </div>
                 </div>
                 {/* <div>Access Token: {accessToken}</div> */}
-                {session?.user?(
+                {session? (
                     <>
-                    {/* <p className='bg-white'>{session.user.name}</p> */}
-                    <button className='bg-white' onClick={() => signOut()}>sign out</button>
+                        {/* <p className='bg-white'>{session.user.name}</p> */}
+                        <button className='bg-white' onClick={() => signOut()}>sign out</button>
                     </>
-                ):(
+                ) : (
                     <button className='bg-white' onClick={() => signIn()}>sign in</button>
                 )}
             </nav>
@@ -47,4 +52,26 @@ const Nav = () => {
     )
 }
 
-export default Nav
+
+
+// export async function getServerSideProps({ req }) {
+//     const session = await getSession({ req });
+
+//     console.log(session);
+//     if (!session) {
+//         return{
+//         redirect:{
+//             destination : '/login',
+//             permanent: false,
+//         }
+//         }
+//     }
+
+//     return {
+//         props: {
+//             session
+//         }
+//     }
+
+
+// }

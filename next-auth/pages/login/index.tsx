@@ -1,12 +1,17 @@
 import React from 'react'
 import { Formik, Field, Form } from 'formik'
 import { signIn } from 'next-auth/react';
+import { GetServerSideProps, NextPage } from 'next';
+import { auth } from '../../utils/auth';
 
 
+export const getServerSideProps: GetServerSideProps<{}> = async context => {
+    return auth(context);
+};
+  
 
 export default function Login() {
-    
-    
+
     async function handleSubmit(values: any) {
         const result = await signIn('credentials',{
             email:values.email,
