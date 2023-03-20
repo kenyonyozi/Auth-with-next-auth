@@ -1,6 +1,7 @@
 
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
+import { redirect } from "next/dist/server/api-utils";
 
 
 
@@ -27,11 +28,10 @@ export const authOptions: NextAuthOptions = {
                     })
                 });
                 const user = await res.json();
-                console.log({user});
-
+                console.log({ user });
 
                 if (res.ok && user) {
-                    console.log(',,,,,',user);
+                    console.log(',,,,,', user);
 
                     return user;
                 }
@@ -42,18 +42,22 @@ export const authOptions: NextAuthOptions = {
 
     session: {
         strategy: "jwt",
-      
+        // Seconds - How long until an idle session expires and is no longer valid.
+        maxAge: 30 * 24 * 60 * 60, // 30 days
     },
+
+
     pages: {
         signIn: '/login',
 
     },
-    callbacks:{
-        async jwt({token,user}){
-            return{...token, ...user}
+
+    callbacks: {
+        async jwt({ token, user }) {
+            return { ...token, ...user }
         },
-        async session({session,token,user}){
-            session.user = token
+        async session({ session, token, user }) {
+            session.user = token as any
             return session
         }
     }

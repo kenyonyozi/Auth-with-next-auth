@@ -1,17 +1,57 @@
+import { useEffect, useState } from 'react';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react'
-import { redirect } from 'next/dist/server/api-utils';
-import React from 'react'
+
 
 export default function Nav() {
-    const { data: session, status } = useSession();
+    const { data: session, status } = useSession()
 
-    console.log(session);
+    const [userInfo, setUserInfo] = useState<any>({});
+
+    console.log("userInfo", userInfo)
+
+    console.log('session', session);
     console.log('status', status);
+    console.log('accesstoken', session?.user.accessToken);
 
-    // if (!session) {
-      
-    // }
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            if (session) {
+                const res = await fetch('http://localhost:9000/users/user_01GV60VFEG9D4HQPDDFEX0WTN1', {
+                    method: 'Get',
+                    headers: {
+                        authorization: `bearer ${session.user.accessToken}`,
+                    },
+                });
+                const response = await res.json()
+                console.log('response', response);
+                setUserInfo(response)
+            }
+        }
+
+
+
+        fetchUser();
+
+    }, [session]);
+
+
+    // useEffect(() => {
+    //     const fetchUser = async () => {
+    //         const res = await fetch('http://localhost:9000/users/user_01GV60VFEG9D4HQPDDFEX0WTN1', {
+    //             method: 'Get',
+    //             headers: {
+    //                 authorization: `bearer  ${session?.user.accessToken}`,
+    //             },
+    //         });
+    //         const response = await res.json()
+    //         console.log('response', response);
+    //         setUserInfo(response)
+    //     }
+
+    //     fetchUser();
+
+    // }, []);
 
 
     return (
@@ -37,10 +77,17 @@ export default function Nav() {
                         </ul>
                     </div>
                 </div>
-                {/* <div>Access Token: {accessToken}</div> */}
-                {session? (
+
+
+                <>
+                    {userInfo && (
+                        <p className='bg-white' >{`${userInfo.user.firstName} ${userInfo.user.lastName}`}</p> )}
+
+                </>
+
+                {session ? (
                     <>
-                        {/* <p className='bg-white'>{session.user.name}</p> */}
+
                         <button className='bg-white' onClick={() => signOut()}>sign out</button>
                     </>
                 ) : (
