@@ -28,30 +28,10 @@ export default function Nav() {
                 setUserInfo(response)
             }
         }
-
-
-
         fetchUser();
 
     }, [session]);
 
-
-    // useEffect(() => {
-    //     const fetchUser = async () => {
-    //         const res = await fetch('http://localhost:9000/users/user_01GV60VFEG9D4HQPDDFEX0WTN1', {
-    //             method: 'Get',
-    //             headers: {
-    //                 authorization: `bearer  ${session?.user.accessToken}`,
-    //             },
-    //         });
-    //         const response = await res.json()
-    //         console.log('response', response);
-    //         setUserInfo(response)
-    //     }
-
-    //     fetchUser();
-
-    // }, []);
 
 
     return (
@@ -78,12 +58,15 @@ export default function Nav() {
                     </div>
                 </div>
 
+                {userInfo ? (
+                    <>
 
-                <>
-                    {userInfo && (
-                        <p className='bg-white' >{`${userInfo.user.firstName} ${userInfo.user.lastName}`}</p> )}
+                        <p className='bg-white' >{`${userInfo?.user?.firstName} ${userInfo?.user?.lastName}`}</p>
+                    </>
+                ) : (
+                    null
+                )}
 
-                </>
 
                 {session ? (
                     <>
@@ -98,27 +81,3 @@ export default function Nav() {
         </div>
     )
 }
-
-
-
-// export async function getServerSideProps({ req }) {
-//     const session = await getSession({ req });
-
-//     console.log(session);
-//     if (!session) {
-//         return{
-//         redirect:{
-//             destination : '/login',
-//             permanent: false,
-//         }
-//         }
-//     }
-
-//     return {
-//         props: {
-//             session
-//         }
-//     }
-
-
-// }

@@ -1,6 +1,8 @@
 
 import Nav from '@/components/nav/nav'
 
+Home.auth = {}
+
 export default function Home() {
   return (
     <div className='bg-red-300'>

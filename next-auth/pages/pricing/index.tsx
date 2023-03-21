@@ -1,3 +1,6 @@
+
+Price.auth = {}
+
 export default function Price() {
 
     return (
