@@ -1,14 +1,13 @@
 import { getSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next';
-// interface Props {
-//   Users: any[];
-// }
+import { decodeAuthToken } from '../../utils/decodeToken';
+
 
 
 Contact.auth = {}
 
 
-export default function Contact({ Users }:any) {
+export default function Contact({ Users }: any) {
 
   return (
     <div className=''>
@@ -28,23 +27,29 @@ export default function Contact({ Users }:any) {
 
 export async function getServerSideProps({ req }: any) {
   const session = await getSession({ req });
+  let userRole = '';
+  
+  if (session?.user.accessToken) {
+    const authTokenData:any = decodeAuthToken(session.user.accessToken);
+    console.log('decoded', authTokenData);
+    userRole = authTokenData.role;
 
-  if (session) {
-    const res = await fetch('http://localhost:9000/users', {
-      method: 'Get',
-      headers: {
-        authorization: `bearer ${session.user.accessToken}`,
-      },
-    });
-    const data = await res.json()
-    const Users = await data.users
-    console.log('data', data.users);
+    if (userRole === 'admin') {
+      const res = await fetch('http://localhost:9000/users', {
+        method: 'Get',
+        headers: {
+          authorization: `bearer ${session.user.accessToken}`,
+        },
+      });
+      const data = await res.json();
+      const Users = await data.users;
+      console.log('data', data.users);
 
-    return {
-      props: { Users }
+      return {
+        props: { Users }
+      };
     }
   }
-
 
   if (!session) {
     return {
@@ -52,6 +57,8 @@ export async function getServerSideProps({ req }: any) {
         destination: '/login',
         permanent: false,
       }
-    }
+    };
   }
+
+  return { props: { userRole } };
 }

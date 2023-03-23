@@ -7,22 +7,34 @@ import { SessionProvider } from "next-auth/react"
 
 
 //this checks if theres no session and routes to login works on all pages it called 
-function Auth({ children } :any) {
-  const router = useRouter();
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push("/login");
-    },
-  });
+// function Auth({ children } :any) {
+//   const router = useRouter();
+//   const { status } = useSession({
+//     required: true,
+//     onUnauthenticated() {
+//       router.push("/login");
+//     },
+//   });
+
+//   if (status === "loading") {
+//     return (
+//       null
+//       // <div> Loading... </div>
+//     );
+//   }
+//   return children;
+// }
+
+
+function Auth({ children }:any) {
+  // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
+  const { status } = useSession({ required: true })
 
   if (status === "loading") {
-    return (
-      null
-      // <div> Loading... </div>
-    );
+    return <div>Loading...</div>
   }
-  return children;
+
+  return children
 }
 
 
@@ -34,14 +46,14 @@ export default function App({
 }: any) {
   return (
     <SessionProvider session={pageProps.session}>
-    {Component.auth ? (
-      <Auth>
+      {Component.auth ? (
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
+      ) : (
         <Component {...pageProps} />
-      </Auth>
-    ) : (
-      <Component {...pageProps} />
-    )}
-  </SessionProvider>
+      )}
+    </SessionProvider>
     // <SessionProvider session={session}>
     //   <Component {...pageProps} />
     // </SessionProvider>

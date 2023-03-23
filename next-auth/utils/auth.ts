@@ -7,6 +7,8 @@ import { ParsedUrlQuery } from 'querystring';
 export async function auth(
   context: GetServerSidePropsContext<ParsedUrlQuery>,
 ): Promise<GetServerSidePropsResult<{}>> {
+  //if logged in dont access login page
+
   const session = await getSession({ req: context.req });
 
   if (session) {

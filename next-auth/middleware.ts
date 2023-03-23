@@ -1,9 +1,9 @@
 export {default} from 'next-auth/middleware'
 
-export const config = {matcher :['/admins','/pricing','/about']}
+export const config = {matcher :[]}
 
 
-
+//protected routes can be accessed only when logged in
 
 
 

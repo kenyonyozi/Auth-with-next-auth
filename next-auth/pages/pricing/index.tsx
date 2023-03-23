@@ -1,5 +1,5 @@
 
-Price.auth = {}
+// Price.auth = {}
 
 export default function Price() {
 

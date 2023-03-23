@@ -1,7 +1,7 @@
 
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
-import { redirect } from "next/dist/server/api-utils";
+
 
 
 
@@ -43,9 +43,8 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
         // Seconds - How long until an idle session expires and is no longer valid.
-        maxAge: 5 // 30 days
+        // maxAge: 2 // 30 days
     },
-
 
     pages: {
         signIn: '/login',

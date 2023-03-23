@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react'
+import { decodeAuthToken } from '../../utils/decodeToken';
 
+// import jwtDecode from 'jwt-decode';
 
 export default function Nav() {
     const { data: session, status } = useSession()
@@ -13,11 +15,16 @@ export default function Nav() {
     console.log('status', status);
     console.log('accesstoken', session?.user.accessToken);
 
-
     useEffect(() => {
         const fetchUser = async () => {
             if (session) {
-                const res = await fetch('http://localhost:9000/users/user_01GV60VFEG9D4HQPDDFEX0WTN1', {
+                // token is the JWT token you want to decode
+                const authTokenData = decodeAuthToken(session?.user.accessToken);
+                // You can then access the payload of the token
+                console.log('decoded', authTokenData);
+                const userID = authTokenData.id;
+
+                const res = await fetch(`http://localhost:9000/users/${userID}`, {
                     method: 'Get',
                     headers: {
                         authorization: `bearer ${session.user.accessToken}`,
@@ -81,3 +88,4 @@ export default function Nav() {
         </div>
     )
 }
+
